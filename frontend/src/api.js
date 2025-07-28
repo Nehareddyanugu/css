@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'https://44f4bfd5-bc43-4671-8cd2-40048f4ff792-00-jzms0wb266ov.sisko.replit.dev/',
+  baseURL: 'http://localhost:5000',
   withCredentials: true,
 });
 
