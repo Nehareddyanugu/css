@@ -1,6 +1,6 @@
 
 // components/AddChargerForm.jsx
-import axios from 'axios';
+import api from '../api';
 
 export default function AddChargerForm({ locationId, onSuccess, onCancel }) {
   const handleAddCharger = async (e) => {
@@ -14,7 +14,7 @@ export default function AddChargerForm({ locationId, onSuccess, onCancel }) {
     };
     
     try {
-      await axios.post(`/api/chargers/${locationId}`, newCharger, { withCredentials: true });
+      await api.post(`/api/chargers/${locationId}`, newCharger);
       if (onSuccess) {
         onSuccess();
       } else {

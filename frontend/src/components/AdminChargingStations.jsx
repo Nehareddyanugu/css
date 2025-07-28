@@ -1,7 +1,7 @@
-
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddChargerForm from './AddChargerForm';
+import api from '../../api';
 
 export default function AdminChargingStations() {
   const [stations, setStations] = useState([]);
@@ -11,7 +11,7 @@ export default function AdminChargingStations() {
   useEffect(() => {
     const fetchStations = async () => {
       try {
-        const res = await axios.get('/api/locations');
+        const res = await api.get('/api/locations');
         setStations(res.data);
       } catch (err) {
         console.error('Error fetching stations:', err);
@@ -31,7 +31,7 @@ export default function AdminChargingStations() {
     // Refresh stations list to show updated data
     const fetchStations = async () => {
       try {
-        const res = await axios.get('/api/locations');
+        const res = await api.get('/api/locations');
         setStations(res.data);
       } catch (err) {
         console.error('Error fetching stations:', err);
@@ -43,7 +43,7 @@ export default function AdminChargingStations() {
   return (
     <div>
       <h2>Charging Stations</h2>
-      
+
       <input
         type="text"
         placeholder="Search by station name..."
@@ -71,7 +71,7 @@ export default function AdminChargingStations() {
                 Add Charger
               </button>
             </div>
-            
+
             {showAddChargerForm === station._id && (
               <div style={{ marginTop: '16px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
                 <AddChargerForm 
