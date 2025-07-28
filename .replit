@@ -6,3 +6,19 @@ channel = "stable-25_05"
 [[ports]]
 localPort = 3000
 externalPort = 80
+
+[workflows]
+runButton = "Start Full Stack"
+
+[[workflows.workflow]]
+name = "Start Full Stack"
+author = 41169745
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && node server.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && DANGEROUSLY_DISABLE_HOST_CHECK=true npm start"
