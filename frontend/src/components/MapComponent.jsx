@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -32,6 +31,9 @@ L.Icon.Default.mergeOptions({
 const MapComponent = () => {
   const [locations, setLocations] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
+  const [route, setRoute] = useState([]);
+  const [routeInstructions, setRouteInstructions] = useState([]);
+  const [showAddStation, setShowAddStation] = useState(false);
   const [sortedLocations, setSortedLocations] = useState([]);
   const [showList, setShowList] = useState(false);
   const [start, setStart] = useState(null);
@@ -204,38 +206,55 @@ const MapComponent = () => {
       <button onClick={findNearest} style={{ marginTop: 10 }}>Find Nearest</button>
 
       <div style={{ display: 'flex' }}>
-        <MapContainer center={[20.5937, 78.9629]} zoom={5} style={{ height: "600px", flex: 1, marginTop: 10 }}>
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <div className="relative h-full w-full">
+          {/* Add Station Button */}
+          <button
+            onClick={() => setShowAddStation(true)}
+            className="absolute top-4 right-4 z-10 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md font-medium shadow-lg transition-colors flex items-center"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add Station
+          </button>
 
-          {userLocation && (
-            <Marker position={[userLocation.lat, userLocation.lng]} icon={blueDotIcon}>
-              <Popup>Your Location</Popup>
-            </Marker>
-          )}
+          <MapContainer
+            center={[20.5937, 78.9629]}
+            zoom={5}
+            style={{ height: "600px", flex: 1, marginTop: 10 }}
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-          {locations.map(loc => (
-            <Marker key={loc._id} position={[loc.latitude, loc.longitude]} icon={greenIcon}>
-              <Popup>
-                <strong>{loc.name}</strong><br />
-                Source: {loc.sourceType}<br />
-                <p><strong>Available:</strong> {loc.chargerStatus?.available || 0}</p>
-                <Link to={`/location/${loc._id}`}>Details</Link>
-              </Popup>
-            </Marker>
-          ))}
-          {chargingStops.map((loc, i) => (
-            <Marker key={`stop-${i}`} position={[loc.latitude, loc.longitude]} icon={greenIcon}>
-              <Popup>
-                <strong>{loc.name}</strong><br />
-                Recharge Stop #{i + 1}<br />
-                <a href={`/location/${loc._id}`} target="_blank">Details</a>
-              </Popup>
-            </Marker>
-          ))}
-          {routePoints.length > 0 && (
-            <Polyline positions={routePoints.map(p => [p.lat, p.lng])} color="blue" />
-          )}
-        </MapContainer>
+            {userLocation && (
+              <Marker position={[userLocation.lat, userLocation.lng]} icon={blueDotIcon}>
+                <Popup>Your Location</Popup>
+              </Marker>
+            )}
+
+            {locations.map(loc => (
+              <Marker key={loc._id} position={[loc.latitude, loc.longitude]} icon={greenIcon}>
+                <Popup>
+                  <strong>{loc.name}</strong><br />
+                  Source: {loc.sourceType}<br />
+                  <p><strong>Available:</strong> {loc.chargerStatus?.available || 0}</p>
+                  <Link to={`/location/${loc._id}`}>Details</Link>
+                </Popup>
+              </Marker>
+            ))}
+            {chargingStops.map((loc, i) => (
+              <Marker key={`stop-${i}`} position={[loc.latitude, loc.longitude]} icon={greenIcon}>
+                <Popup>
+                  <strong>{loc.name}</strong><br />
+                  Recharge Stop #{i + 1}<br />
+                  <a href={`/location/${loc._id}`} target="_blank">Details</a>
+                </Popup>
+              </Marker>
+            ))}
+            {routePoints.length > 0 && (
+              <Polyline positions={routePoints.map(p => [p.lat, p.lng])} color="blue" />
+            )}
+          </MapContainer>
+        </div>
 
         {showSidebar && (
           <div style={{
@@ -277,16 +296,16 @@ const MapComponent = () => {
                   Source: {loc.sourceType}<br />
                   Distance: {loc.actualDistance.toFixed(2)} km<br />
                   {loc.chargerStatus?.available === 0 ? (
-  <span style={{ color: 'red' }}>
-    {(() => {
-      if (!loc.chargers || loc.chargers.length === 0) return "No chargers are added.";
-      const soonest = getSoonestETA(loc.chargers);
-      if (!soonest) return "All chargers busy. No ETA.";
-      const minutes = Math.max(Math.round((new Date(soonest) - new Date()) / 60000), 0);
-      return `Charger will be available in ${minutes} minutes`;
-    })()}
-  </span>
-) : null}
+                    <span style={{ color: 'red' }}>
+                      {(() => {
+                        if (!loc.chargers || loc.chargers.length === 0) return "No chargers are added.";
+                        const soonest = getSoonestETA(loc.chargers);
+                        if (!soonest) return "All chargers busy. No ETA.";
+                        const minutes = Math.max(Math.round((new Date(soonest) - new Date()) / 60000), 0);
+                        return `Charger will be available in ${minutes} minutes`;
+                      })()}
+                    </span>
+                  ) : null}
 
                   <br />
                   <a href={`/location/${loc._id}`} target="_blank">Details</a>
