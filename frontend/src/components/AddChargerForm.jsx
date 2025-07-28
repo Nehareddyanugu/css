@@ -1,7 +1,8 @@
+
 // components/AddChargerForm.jsx
 import axios from 'axios';
 
-export default function AddChargerForm({ locationId }) {
+export default function AddChargerForm({ locationId, onSuccess, onCancel }) {
   const handleAddCharger = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -11,31 +12,103 @@ export default function AddChargerForm({ locationId }) {
       type: form.type.value,
       status: form.status.value,
     };
-    await axios.post(`/api/chargers/${locationId}`, newCharger ,{ withCredentials: true});
-    window.location.reload();
+    
+    try {
+      await axios.post(`/api/chargers/${locationId}`, newCharger, { withCredentials: true });
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error('Error adding charger:', err);
+      alert('Failed to add charger. Please try again.');
+    }
   };
 
   return (
-    <form onSubmit={handleAddCharger}>
-      <h3>Add New Charger</h3>
-      <input name="name" placeholder="Charger Name (e.g. Charger 1)" required /><br />
-      <input name="power" type="number" placeholder="Power (kW)" required /><br />
+    <div>
+      <form onSubmit={handleAddCharger}>
+        <h3>Add New Charger</h3>
+        
+        <div style={{ marginBottom: '8px' }}>
+          <input 
+            name="name" 
+            placeholder="Charger Name (e.g. Charger 1)" 
+            required 
+            style={{ width: '100%', padding: '6px', marginBottom: '4px' }}
+          />
+        </div>
+        
+        <div style={{ marginBottom: '8px' }}>
+          <input 
+            name="power" 
+            type="number" 
+            placeholder="Power (kW)" 
+            required 
+            style={{ width: '100%', padding: '6px', marginBottom: '4px' }}
+          />
+        </div>
 
-      <select name="type" required>
-        <option value="AC">AC</option>
-        <option value="DC">DC</option>
-        <option value="Type2">Type2</option>
-        <option value="CCS">CCS</option>
-        <option value="CHAdeMO">CHAdeMO</option>
-      </select><br />
+        <div style={{ marginBottom: '8px' }}>
+          <select 
+            name="type" 
+            required
+            style={{ width: '100%', padding: '6px', marginBottom: '4px' }}
+          >
+            <option value="">Select Type</option>
+            <option value="AC">AC</option>
+            <option value="DC">DC</option>
+            <option value="Type2">Type2</option>
+            <option value="CCS">CCS</option>
+            <option value="CHAdeMO">CHAdeMO</option>
+          </select>
+        </div>
 
-      <select name="status">
-        <option value="available">Available</option>
-        <option value="plugged in">Plugged In</option>
-        <option value="faulty">Faulty</option>
-      </select><br />
+        <div style={{ marginBottom: '16px' }}>
+          <select 
+            name="status"
+            style={{ width: '100%', padding: '6px', marginBottom: '4px' }}
+          >
+            <option value="available">Available</option>
+            <option value="plugged in">Plugged In</option>
+            <option value="faulty">Faulty</option>
+          </select>
+        </div>
 
-      <button type="submit">Add Charger</button>
-    </form>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button 
+            type="submit"
+            style={{ 
+              padding: '8px 16px', 
+              backgroundColor: '#28a745', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Add Charger
+          </button>
+          
+          {onCancel && (
+            <button 
+              type="button"
+              onClick={onCancel}
+              style={{ 
+                padding: '8px 16px', 
+                backgroundColor: '#6c757d', 
+                color: 'white', 
+                border: 'none', 
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
   );
 }
