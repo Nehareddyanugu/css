@@ -15,32 +15,32 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-gray-200">
-      <div className="flex items-center justify-between px-6 py-3">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg border-b border-gray-300">
+      <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center">
-          <Link to="/" className="flex items-center text-gray-700 hover:text-gray-900 transition-colors">
-            <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          <Link to="/" className="flex items-center text-gray-800 hover:text-blue-700 transition-colors">
+            <svg className="w-7 h-7 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
             </svg>
-            <span className="font-medium">Home</span>
+            <span className="font-bold text-lg text-blue-800">EV Station Finder</span>
           </Link>
         </div>
         
         <div className="flex items-center space-x-4">
           {user ? (
             <>
-              <span className="text-sm text-gray-600">Welcome, {user.email}</span>
+              <span className="text-sm text-gray-600 font-medium">Welcome, {user.email}</span>
               {user.role === 'admin' && (
                 <Link 
                   to="/dashboard" 
-                  className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                  className="px-4 py-2 text-sm bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors font-medium"
                 >
                   Dashboard
                 </Link>
               )}
               <button 
                 onClick={handleLogout}
-                className="px-4 py-2 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
               >
                 Logout
               </button>
@@ -49,13 +49,13 @@ export default function Navbar() {
             <div className="flex items-center space-x-3">
               <Link 
                 to="/login" 
-                className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 transition-colors"
+                className="px-4 py-2 text-sm text-gray-700 hover:text-blue-800 transition-colors font-medium"
               >
                 Login
               </Link>
               <Link 
                 to="/register"
-                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="px-5 py-2 text-sm bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors font-medium shadow-sm"
               >
                 Register
               </Link>

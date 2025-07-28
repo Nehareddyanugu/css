@@ -25,7 +25,7 @@ const App = () => {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-100">
           <Navbar />
           <Routes>
             <Route path="/login" element={<LoginForm />} />
@@ -46,10 +46,10 @@ const App = () => {
               element={
                 <div className="flex h-screen pt-16">
                   {/* Sidebar */}
-                  <div className="w-80 bg-white shadow-lg border-r border-gray-200 overflow-y-auto">
+                  <div className="w-80 bg-white shadow-lg border-r border-gray-300 overflow-y-auto">
                     <div className="p-6">
                       <div className="flex items-center mb-6">
-                        <div className="w-6 h-6 mr-3">
+                        <div className="w-6 h-6 mr-3 text-blue-700">
                           <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
                             <path d="M9 17H7v-7h2m8 7h-2V7h2m-8-4h8v2H9V3z" fill="currentColor"/>
                           </svg>
