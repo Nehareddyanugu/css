@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddChargerForm from './AddChargerForm';
-import api from '../../api';
+import api from '../api';
 
 export default function AdminChargingStations() {
   const [stations, setStations] = useState([]);
