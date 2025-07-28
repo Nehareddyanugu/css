@@ -56,27 +56,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/chargers', chargerRoutes);
 
-// Get location by ID
-app.get('/:id', async (req, res) => {
-  try {
-    const location = await LocationModel.findById(req.params.id);
-    if (!location) return res.status(404).json({ error: 'Location not found' });
 
-    const chargers = await Charger.find({ stationId: req.params.id });
-
-    const statusCounts = { available: 0, 'plugged in': 0, faulty: 0 };
-    chargers.forEach(charger => {
-      if (statusCounts[charger.status] !== undefined) {
-        statusCounts[charger.status]++;
-      }
-    });
-
-    res.json({ location, chargers, statusCounts });
-  } catch (err) {
-    console.error('Error fetching location:', err.message);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
 
 // Update travel times
 app.post('/update-travel-times', async (req, res) => {
